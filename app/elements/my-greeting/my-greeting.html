@@ -1,0 +1,132 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-styles/typography.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+
+<dom-module id="my-greeting">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        width: calc(98.66% - 16px);
+        margin: 16px auto;
+      }
+
+      .header {
+        border-radius: 4px;
+        background-color: var(--my-header);
+        padding: 6px 16px 6px 16px;
+      }
+
+      .headcontent {
+        @apply(--layout-horizontal);
+      }
+
+      .notification {
+        border-radius: 50%;
+        background-color: white;
+        width: 18px;
+        height: 18px;
+      }
+
+    .main {
+      padding: 2px 12px 2px 12px;
+    }
+
+      h1 {
+        color: white;
+        @apply(--paper-font-subhead);
+        @apply(--layout-flex);
+      }
+
+      p {
+        color: white;
+        @apply(--paper-font-body);
+      }
+
+    </style>
+
+    <template is="dom-if" if="{{_is(head)}}">
+      <div class="header">
+        <div class="headcontent">
+          <h1><span>{{title}}</span></h1>
+          <p><span>{{balance}}</span> &Delta;</p>
+        </div>
+      </div>
+    </template>
+    <template is="dom-if" if="{{_is(preview)}}">
+      <div class="main">
+        <p>Preview</p>
+      </div>
+    </template>
+    <template is="dom-if" if="{{_is(full)}}">
+      <div class="main">
+        <p>Full card.</p>
+      </div>
+    </template>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'my-greeting',
+
+        properties: {
+          greeting: {
+            type: String,
+            value: 'Welcome!',
+            notify: true
+          },
+
+          head: {
+            type: Boolean
+          },
+
+          preview: {
+            type: Boolean
+          },
+
+          full: {
+            type: Boolean
+          },
+
+          title: {
+            type: String
+          },
+          headcolor: {
+            type: String,
+            observer: '_headcolor'
+          }
+        },
+
+        ready: function(){
+        },
+
+        _headcolor: function(){
+          this.customStyle['--my-header'] = this.headcolor;
+          this.updateStyles();
+        },
+
+        _is: function(a, b) {
+        if (b === undefined) {
+          b = true;
+        }
+        return a === b;
+      },
+      });
+    })();
+  </script>
+</dom-module>

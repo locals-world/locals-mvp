@@ -1,0 +1,132 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../my-greeting/my-greeting.html">
+
+<dom-module id="my-list">
+  <template>
+    <style>
+      :host {
+        @apply(--layout-vertical);
+      }
+
+      .main {
+        @apply(--layout-flex);
+        @apply(--layout-scroll);
+      }
+
+      .flex {
+        @apply(--layout-flex);
+      }
+
+      iron-icon {
+        color: var(--google-grey-500);
+      }
+    </style>
+    <paper-toolbar id="button">
+        <paper-icon-button icon="menu"></paper-icon-button>
+        <div class="flex">Michael Thuy</div>
+        <div>13311 &Delta;</div>
+    </paper-toolbar>
+
+    <div class="main">
+
+        <template is="dom-repeat" items="[[data]]">
+
+          <!-- <paper-item>
+            <paper-item-body two-line>
+              <div>[[item.title]]</div>
+              <div secondary>[[item.icon]]</div>
+            </paper-item-body>
+            <iron-icon icon="info"></iron-icon>
+          </paper-item> -->
+          <my-greeting on-tap="_onClick" headcolor="[[item.headercolor]]" head title="[[item.objectName]]" balance="[[item.balance]]"></my-greeting>
+
+        </template>
+
+    </div>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'my-list',
+
+    behaviors: [
+      Polymer.NeonAnimatableBehavior
+    ],
+
+    listeners: {
+      // 'click': '_onClick'
+    },
+
+    properties: {
+
+      data: {
+        type: Array,
+        value: function() {
+          return [];
+        }
+      },
+
+      animationConfig: {
+        type: Object,
+        value: function() {
+          return {
+            'entry': [{
+              name: 'fade-in-animation',
+              node: this.$.button
+            }],
+
+            'exit': [{
+              name: 'fade-out-animation',
+              node: this.$.button
+            }, {
+              name: 'hero-animation',
+              id: 'hero',
+              fromPage: this
+            }]
+          };
+        }
+      }
+
+    },
+
+    _onClick: function(event) {
+      var target = event.target;
+      while (target !== this && !target._templateInstance) {
+        target = target.parentNode;
+      }
+
+      // configure the page animation
+      this.sharedElements = {
+        'hero': target,
+      };
+
+      this.fire('item-click', {
+        item: target,
+      });
+    }
+
+  });
+
+</script>
